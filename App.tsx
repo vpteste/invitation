@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef, PropsWithChildren } from 'react';
 import { MdLocationOn, MdOutlineWbIncandescent, MdOutlineCardGiftcard, MdOutlineArrowDownward, MdPhone, MdCheck } from 'react-icons/md';
+import confetti from 'canvas-confetti';
 
 // Composant pour animer les sections au défilement
 const AnimatedSection = ({ children, className, delay = 0 }: PropsWithChildren<{ className?: string, delay?: number }>) => {
@@ -60,6 +61,32 @@ const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+      useEffect(() => {
+
+        if (pageLoaded) {
+
+          console.log("Confetti effect triggered!"); // Debug log
+
+          // Add a small delay before calling confetti
+
+          setTimeout(() => {
+
+            confetti({
+
+              particleCount: 50, // Reduced for testing
+
+              spread: 70,
+
+              origin: { y: 0.6 } // From bottom-center for a simple burst
+
+            });
+
+          }, 500); // 500ms delay
+
+        }
+
+      }, [pageLoaded]);
+
 
 
 
@@ -73,14 +100,14 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const paperTextureUrl = "https://www.transparenttextures.com/patterns/old-paper.png";
+  const paperTextureUrl = "https://img.freepik.com/free-photo/old-paper-texture-background_1182-100.jpg";
   const coupleImageUrl = "https://media.istockphoto.com/id/1819424371/fr/photo/couple-se-tenant-la-main-et-bijoux-pour-mariage-fian%C3%A7ailles-ou-union-matrimoniale-ou.jpg?s=612x612&w=0&k=20&c=l-Yt1TI1IRyEmYms6lk-0qSKO7nsuIXe3W76vHzy7zQ=";
 
 
   const mairieMapUrl = "https://www.google.com/maps/search/?api=1&query=Mairie+annexe+de+Djrogobite,Abidjan";
   const egliseMapUrl = "https://www.google.com/maps/search/?api=1&query=Eglise+Sainte+Famille+Riviera+2,Abidjan";
   const salleMapUrl = "https://www.google.com/maps/search/?api=1&query=Corne+d'abondance+Faya,Abidjan";
-  const rsvpUrl = `https://wa.me/2250757059977?text=Bonjour%2C%20je%20confirme%20ma%20pr%C3%A9sence%20au%20mariage%20d'Afefa%20et%20Christian.`;
+  const rsvpUrl = `https://wa.me/2250757059977?text=Bonjour%2C%20je%20confirme%20ma%20pr%C3%A9sence%20au%20mariage%20d'Afefa%20et%20Christian%20en%20tant%20que%20${encodeURIComponent(guestName)}.`;
   const phoneUrl = "tel:+2250757059977";
   const moonservicesUrl = "https://wa.me/2250576535792";
   
@@ -134,7 +161,7 @@ const App: React.FC = () => {
   const names = "Afefa & Christian".split('');
 
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-[#F5F5DC] shadow-2xl overflow-hidden" style={{ backgroundImage: `url(${paperTextureUrl})` }}>
+    <div className="max-w-md mx-auto min-h-screen bg-[#F5F5DC] shadow-2xl overflow-hidden">
 
       <main className={`p-6 md:p-8 text-center transition-opacity duration-1000 ease-in ${pageLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ color: textDark }}>
         
@@ -168,7 +195,7 @@ const App: React.FC = () => {
         </AnimatedSection>
 
         <AnimatedSection className="mb-10 p-6 bg-white/50 rounded-lg shadow-inner">
-          <h3 className="font-playfair text-4xl font-bold mb-4" style={{ color: accentGold }}>Save the Date</h3>
+          <h3 className="font-playfair text-4xl font-bold mb-4" style={{ color: accentGold }}>Retenez la Date</h3>
           <div className="text-3xl font-bold tracking-widest" style={{ color: textDark }}>
             SAMEDI <span className="text-5xl font-playfair mx-2" style={{ color: accentGold }}>20</span> DÉCEMBRE 2025
           </div>
@@ -252,7 +279,7 @@ const App: React.FC = () => {
           <AnimatedSection className="p-4 bg-white/50 rounded-lg shadow-inner">
             <MdOutlineCardGiftcard className="w-10 h-10 mx-auto mb-2 icon-glow icon-to-pulse" style={{ color: accentGold }}/>
             <h4 className="font-playfair text-2xl font-bold mb-2">Cadeaux</h4>
-            <p style={{ color: textMedium }}>Pour les gestes de générosité, merci de privilégier les cadeaux en espèces.</p>
+            <p style={{ color: textMedium }}>MERCI DE PRIVILEGIER LES CARDEAUX EN EXPERCE</p>
           </AnimatedSection>
 
           <AnimatedSection className="p-4 bg-white/50 rounded-lg shadow-inner">
