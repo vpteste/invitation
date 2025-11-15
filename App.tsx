@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect, useRef, PropsWithChildren } from 'react';
 import { MdLocationOn, MdOutlineWbIncandescent, MdOutlineCardGiftcard, MdOutlineArrowDownward, MdPhone, MdCheck } from 'react-icons/md';
+import { FaTiktok } from 'react-icons/fa';
 import confetti from 'canvas-confetti';
 
 // Composant pour animer les sections au défilement
