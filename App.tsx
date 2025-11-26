@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, PropsWithChildren } from 'react';
-import { MdLocationOn, MdOutlineWbIncandescent, MdOutlineCardGiftcard, MdOutlineArrowDownward, MdPhone, MdCheck } from 'react-icons/md';
+import { MdLocationOn, MdOutlineArrowDownward, MdPhone, MdCheck, MdWarning } from 'react-icons/md';
 import { FaTiktok } from 'react-icons/fa';
 import confetti from 'canvas-confetti';
+import Envelope from './components/Envelope'; // Import Envelope
+import AudioPlayer from './components/AudioPlayer'; // Import AudioPlayer
 
 // Composant pour animer les sections au défilement
-const AnimatedSection = ({ children, className, delay = 0 }: PropsWithChildren<{ className?: string, delay?: number }>) => {
+const AnimatedSection = ({ children, className, delay = 0, onVisible }: PropsWithChildren<{ className?: string, delay?: number, onVisible?: () => void }>) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -13,6 +15,7 @@ const AnimatedSection = ({ children, className, delay = 0 }: PropsWithChildren<{
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          if (onVisible) onVisible();
           observer.unobserve(entry.target);
         }
       },
@@ -32,7 +35,7 @@ const AnimatedSection = ({ children, className, delay = 0 }: PropsWithChildren<{
         observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, [onVisible]);
 
   return (
     <div
@@ -51,8 +54,13 @@ const AnimatedSection = ({ children, className, delay = 0 }: PropsWithChildren<{
 
 
 const App: React.FC = () => {
-  const [guestName, setGuestName] = useState('Mme, Mlle, Mr, Couple');
+  const [guestName, setGuestName] = useState('Monsieur, Madame, Mlle, Couple');
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false); // State for envelope
+
+  const handleOpenEnvelope = () => {
+    setIsEnvelopeOpen(true);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -63,7 +71,7 @@ const App: React.FC = () => {
 
       useEffect(() => {
 
-        if (pageLoaded) {
+        if (pageLoaded && isEnvelopeOpen) { // Trigger confetti only when envelope is open
 
           console.log("Confetti effect triggered!"); // Debug log
 
@@ -73,23 +81,19 @@ const App: React.FC = () => {
 
             confetti({
 
-              particleCount: 50, // Reduced for testing
+              particleCount: 100,
 
-              spread: 70,
-
-              origin: { y: 0.6 } // From bottom-center for a simple burst
+              spread: 90,
+              
+              origin: { y: 0.6 }
 
             });
 
-          }, 500); // 500ms delay
+          }, 200); // Short delay after envelope is gone
 
         }
 
-      }, [pageLoaded]);
-
-
-
-
+      }, [pageLoaded, isEnvelopeOpen]); // Add isEnvelopeOpen to dependency array
 
 
   useEffect(() => {
@@ -101,19 +105,19 @@ const App: React.FC = () => {
   }, []);
 
   const paperTextureUrl = "https://img.freepik.com/free-photo/old-paper-texture-background_1182-100.jpg";
-  const coupleImageUrl = "https://media.istockphoto.com/id/1819424371/fr/photo/couple-se-tenant-la-main-et-bijoux-pour-mariage-fian%C3%A7ailles-ou-union-matrimoniale-ou.jpg?s=612x612&w=0&k=20&c=l-Yt1TI1IRyEmYms6lk-0qSKO7nsuIXe3W76vHzy7zQ=";
+  const coupleImageUrl = "/images/imgmariage.jpeg";
 
 
   const mairieMapUrl = "https://www.google.com/maps/search/?api=1&query=Mairie+annexe+de+Djrogobite,Abidjan";
   const egliseMapUrl = "https://www.google.com/maps/search/?api=1&query=Eglise+Sainte+Famille+Riviera+2,Abidjan";
-  const salleMapUrl = "https://www.google.com/maps/search/?api=1&query=Corne+d'abondance+Faya,Abidjan";
+  const salleMapUrl = "https://maps.app.goo.gl/zzzxVNP6n3DEus927";
   const rsvpUrl = `https://wa.me/2250757059977?text=Bonjour%2C%20je%20confirme%20ma%20pr%C3%A9sence%20au%20mariage%20d'Afefa%20et%20Christian%20en%20tant%20que%20${encodeURIComponent(guestName)}.`;
   const phoneUrl = "tel:+2250757059977";
-  const moonservicesUrl = "https://wa.me/2250576535792";
+  const moonservicesUrl = "https://wa.me/2250576535792?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20vos%20services%20d'invitation%20digitale.";
   
   const accentGold = '#B08D57';
-  const textDark = '#3A3238';
-  const textMedium = '#5C4B51';
+  const textDark = '#003366'; // Navy Blue
+  const textMedium = '#003366'; // Navy Blue
 
   const colorPalette = [
     { name: 'Bleu Marine', hex: '#003366' },
@@ -158,10 +162,41 @@ const App: React.FC = () => {
     }, 500);
   };
 
+  const [isGiftRevealed, setIsGiftRevealed] = useState(false);
+  const giftRef = useRef<HTMLImageElement>(null);
+
+  const triggerGiftConfetti = () => {
+    if (isGiftRevealed) return;
+    
+    setIsGiftRevealed(true);
+
+    setTimeout(() => {
+      if (giftRef.current) {
+        const rect = giftRef.current.getBoundingClientRect();
+        const x = (rect.left + rect.width / 2) / window.innerWidth;
+        const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { x, y },
+          colors: ['#B08D57', '#003366', '#FFFFFF'],
+          zIndex: 9999,
+        });
+      }
+    }, 500);
+  };
+
   const names = "Afefa & Christian".split('');
 
+  if (!isEnvelopeOpen) {
+    return <Envelope onOpen={handleOpenEnvelope} />;
+  }
+
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-[#F5F5DC] shadow-2xl overflow-hidden">
+    <>
+      <AudioPlayer src="/musique.mp3" autoPlayAfterOpen={isEnvelopeOpen} />
+      <div className="max-w-md mx-auto min-h-screen bg-white shadow-2xl overflow-hidden">
 
       <main className={`p-6 md:p-8 text-center transition-opacity duration-1000 ease-in ${pageLoaded ? 'opacity-100' : 'opacity-0'}`} style={{ color: textDark }}>
         
@@ -194,7 +229,7 @@ const App: React.FC = () => {
           </p>
         </AnimatedSection>
 
-        <AnimatedSection className="mb-10 p-6 bg-white/50 rounded-lg shadow-inner">
+        <AnimatedSection className="mb-10 p-6 bg-gray-100 rounded-lg shadow-inner">
           <h3 className="font-playfair text-4xl font-bold mb-4" style={{ color: accentGold }}>Retenez la Date</h3>
           <div className="text-3xl font-bold tracking-widest" style={{ color: textDark }}>
             SAMEDI <span className="text-5xl font-playfair mx-2" style={{ color: accentGold }}>20</span> DÉCEMBRE 2025
@@ -214,7 +249,7 @@ const App: React.FC = () => {
         <div className="space-y-8">
             {/* Cérémonie Civile */}
             <AnimatedSection>
-                 <div className="flex items-center space-x-4 bg-white/50 p-4 rounded-lg shadow-inner">
+                 <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-lg shadow-inner">
                     <a href={mairieMapUrl} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 icon-glow icon-to-pulse">
                       <MdLocationOn className="w-12 h-12" style={{ color: accentGold }}/>
                     </a>
@@ -227,7 +262,7 @@ const App: React.FC = () => {
             </AnimatedSection>
             {/* Cérémonie Religieuse */}
             <AnimatedSection>
-                 <div className="flex items-center space-x-4 bg-white/50 p-4 rounded-lg shadow-inner">
+                 <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-lg shadow-inner">
                     <a href={egliseMapUrl} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 icon-glow icon-to-pulse">
                       <MdLocationOn className="w-12 h-12" style={{ color: accentGold }}/>
                     </a>
@@ -240,7 +275,7 @@ const App: React.FC = () => {
             </AnimatedSection>
              {/* Réception */}
             <AnimatedSection>
-                 <div className="flex items-center space-x-4 bg-white/50 p-4 rounded-lg shadow-inner">
+                 <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-lg shadow-inner">
                     <a href={salleMapUrl} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 icon-glow icon-to-pulse">
                       <MdLocationOn className="w-12 h-12" style={{ color: accentGold }}/>
                     </a>
@@ -254,9 +289,9 @@ const App: React.FC = () => {
         </div>
         
         <div className="my-10 space-y-8">
-          <AnimatedSection className="p-4 bg-white/50 rounded-lg shadow-inner">
-            <MdOutlineWbIncandescent className="w-10 h-10 mx-auto mb-2" style={{ color: accentGold }}/>
-            <h4 className="font-playfair text-2xl font-bold mb-2">Dress code</h4>
+          <AnimatedSection className="p-4 bg-gray-100 rounded-lg shadow-inner">
+            <img src="/images/dresscode.png" alt="Dress Code" className="w-24 h-24 mx-auto mb-2 animate-tremble" />
+            <h4 className="font-playfair text-2xl font-bold mb-2" style={{ color: accentGold }}>Dress code</h4>
             <p className="font-semibold text-lg" style={{ color: textMedium }}>CHIC & GLAMOUR</p>
             <div className="flex justify-center items-center space-x-3 mt-4">
               {colorPalette.map((color, index) => (
@@ -276,13 +311,29 @@ const App: React.FC = () => {
             </div>
           </AnimatedSection>
 
-          <AnimatedSection className="p-4 bg-white/50 rounded-lg shadow-inner">
-            <MdOutlineCardGiftcard className="w-10 h-10 mx-auto mb-2 icon-glow icon-to-pulse" style={{ color: accentGold }}/>
-            <h4 className="font-playfair text-2xl font-bold mb-2">Cadeaux</h4>
-            <p style={{ color: textMedium }}>MERCI DE PRIVILEGIER LES CARDEAUX EN EXPERCE</p>
+          <AnimatedSection className="p-4 bg-gray-100 rounded-lg shadow-inner relative overflow-hidden" onVisible={triggerGiftConfetti}>
+            <div className="relative inline-block group">
+              <img 
+                ref={giftRef}
+                src="/images/cadeau.png" 
+                alt="Cadeau" 
+                className={`w-32 h-32 mx-auto mb-2 transition-all duration-500 ${isGiftRevealed ? 'animate-tada' : 'animate-rotate-y-slow'}`} 
+              />
+            </div>
+            
+            <h4 className={`font-playfair text-2xl font-bold mb-2 transition-colors duration-500 ${isGiftRevealed ? 'text-[#B08D57]' : ''}`}>
+              Cadeaux
+            </h4>
+            
+            <div className={`transition-all duration-1000 ease-out overflow-hidden ${isGiftRevealed ? 'max-h-40 opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+              <p className="font-bold text-lg animate-gold-gradient">
+                MERCI DE PRIVILÉGIER LES CADEAUX EN ESPÈCES.
+              </p>
+              <div className="mt-2 text-2xl">🎁✨</div>
+            </div>
           </AnimatedSection>
 
-          <AnimatedSection className="p-4 bg-white/50 rounded-lg shadow-inner">
+          <AnimatedSection className="p-4 bg-gray-100 rounded-lg shadow-inner">
             <a href={rsvpUrl} onClick={handleRsvpClick} className="block group">
               <div className="flex items-center justify-center space-x-3 transition-transform transform group-hover:scale-105">
                 {rsvpConfirmed ? (
@@ -292,16 +343,16 @@ const App: React.FC = () => {
                     </>
                 ) : (
                     <>
-                      <span className="font-playfair text-xl font-bold" style={{ color: textMedium }}>Merci de confirmer votre présence ici</span>
-                      <MdOutlineArrowDownward className="w-6 h-6 animate-bounce" style={{ color: accentGold }}/>
+                      <span className="font-bold text-lg animate-heartbeat" style={{ color: accentGold }}>Merci de confirmer votre présence ici</span>
+                      <MdOutlineArrowDownward className="w-6 h-6 animate-swoosh-down" style={{ color: accentGold }}/>
                     </>
                 )}
               </div>
             </a>
           </AnimatedSection>
           
-          <AnimatedSection className="p-6 bg-white/50 rounded-lg shadow-inner">
-            <h4 className="font-playfair text-2xl font-bold mb-4">Un Mariage Déconnecté</h4>
+          <AnimatedSection className="p-6 bg-gray-100 rounded-lg shadow-inner">
+            <h4 className="font-playfair text-2xl font-bold mb-4">MARIAGE DÉCONNECTÉ</h4>
             <div className="flex justify-center items-center space-x-4">
               <img src="/images/icon.png" alt="Social Media Crossed Out" className="w-48 h-auto" />
             </div>
@@ -311,9 +362,16 @@ const App: React.FC = () => {
         <AnimatedSection className="mt-10">
           <p className="font-semibold" style={{ color: textMedium }}>Merci de respecter l'heure pour le bon déroulement de la cérémonie.</p>
         </AnimatedSection>
+
+        <AnimatedSection className="mt-6">
+          <div className="flex items-center justify-center space-x-2 text-sm">
+            <MdWarning className="w-5 h-5" style={{ color: accentGold }} />
+            <p className="font-semibold" style={{ color: textMedium }}>Cette invitation est strictement personnelle.</p>
+          </div>
+        </AnimatedSection>
       </main>
       
-      <footer className="py-6 px-4 text-center" style={{ backgroundColor: textDark, color: '#F5F5DC' }}>
+      <footer className="py-6 px-4 text-center" style={{ backgroundColor: textDark, color: '#FFFFFF' }}>
           <a href={phoneUrl} className="inline-flex items-center space-x-2 group icon-glow">
               <MdPhone className="w-5 h-5 transition-transform transform group-hover:scale-110" />
               <span>{phoneUrl.replace('tel:', '')}</span>
@@ -326,6 +384,7 @@ const App: React.FC = () => {
       </footer>
 
     </div>
+    </>
   );
 };
 
