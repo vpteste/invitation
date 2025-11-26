@@ -343,7 +343,7 @@ const App: React.FC = () => {
                     </>
                 ) : (
                     <>
-                      <span className="font-bold text-lg animate-heartbeat" style={{ color: accentGold }}>Merci de confirmer votre présence ici</span>
+                      <span className="font-bold text-lg animate-heartbeat" style={{ color: textMedium }}>Merci de confirmer votre présence ici</span>
                       <MdOutlineArrowDownward className="w-6 h-6 animate-swoosh-down" style={{ color: accentGold }}/>
                     </>
                 )}
