@@ -186,29 +186,30 @@ const App: React.FC = () => {
     }, 500);
   };
 
-  const [selectedName, setSelectedName] = useState('');
-  const [selectedImage, setSelectedImage] = useState('');
+  const coupleNames = [
+    'TOURE & MOONA',
+    'KOUASSI & DAVILLA',
+    'SERY & AICHA',
+    'JULIEN & STEPHANIE',
+    'FRANCK & GRACE',
+    'THOMAS & PRICY',
+    'LORIS & LEATICIA',
+  ];
+  const coupleImages = [
+    '/images/marie5.avif',
+    '/images/mariage3.avif',
+    '/images/marie2.jpeg',
+    '/images/marie3.jpeg',
+    '/images/marie4.avif',
+    '/images/marie6.avif',
+    '/images/marie7.webp',
+    '/images/marie8.jpeg',
+  ];
+
+  const [selectedName, setSelectedName] = useState(coupleNames[0]);
+  const [selectedImage, setSelectedImage] = useState(coupleImages[0]);
 
   useEffect(() => {
-    const coupleNames = [
-      'TOURE & MOONA',
-      'KOUASSI & DAVILLA',
-      'SERY & AICHA',
-      'JULIEN & STEPHANIE',
-      'FRANCK & GRACE',
-      'THOMAS & PRICY',
-      'LORIS & LEATICIA',
-    ];
-    const coupleImages = [
-      '/images/marie5.avif',
-      '/images/mariage3.avif',
-      '/images/marie2.jpeg',
-      '/images/marie3.jpeg',
-      '/images/marie4.avif',
-      '/images/marie6.avif',
-      '/images/marie7.webp',
-      '/images/marie8.jpeg',
-    ];
     const randomNameIndex = Math.floor(Math.random() * coupleNames.length);
     const randomImageIndex = Math.floor(Math.random() * coupleImages.length);
 
