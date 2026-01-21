@@ -105,14 +105,14 @@ const App: React.FC = () => {
   }, []);
 
   const paperTextureUrl = "https://img.freepik.com/free-photo/old-paper-texture-background_1182-100.jpg";
-  const coupleImageUrl = "/images/imgmariage.jpeg";
+  const coupleImageUrl = "/images/imgmariage.jpg";
 
 
   const mairieMapUrl = "https://www.google.com/maps/search/?api=1&query=Mairie+annexe+de+Djrogobite,Abidjan";
   const egliseMapUrl = "https://www.google.com/maps/search/?api=1&query=Eglise+Sainte+Famille+Riviera+2,Abidjan";
   const salleMapUrl = "https://maps.app.goo.gl/zzzxVNP6n3DEus927";
-  const rsvpUrl = `https://wa.me/2250757059977?text=Bonjour%2C%20je%20confirme%20ma%20pr%C3%A9sence%20au%20mariage%20d'Afefa%20et%20Christian%20en%20tant%20que%20${encodeURIComponent(guestName)}.`;
-  const phoneUrl = "tel:+2250757059977";
+  const rsvpUrl = `https://wa.me/2250576535792?text=Bonjour%2C%20je%20confirme%20ma%20pr%C3%A9sence%20au%20mariage%20d'Afefa%20et%20Christian%20en%20tant%20que%20${encodeURIComponent(guestName)}.`;
+  const phoneUrl = "tel:+2250576535792";
   const moonservicesUrl = "https://wa.me/2250576535792?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20vos%20services%20d'invitation%20digitale.";
   
   const accentGold = '#B08D57';
@@ -189,6 +189,26 @@ const App: React.FC = () => {
 
   const names = "Afefa & Christian".split('');
 
+  const dates = [
+    { day: "20", month: "DÉCEMBRE", year: "2025", weekday: "SAMEDI" },
+    // Note: "30 FEVRIER 2026" is an invalid date, but added as per user request.
+    { day: "30", month: "FEVRIER", year: "2026", weekday: "" },
+    { day: "03", month: "JUIN", year: "2026", weekday: "" },
+    { day: "01", month: "MARS", year: "2026", weekday: "" },
+    { day: "16", month: "NOVEMBRE", year: "2026", weekday: "" },
+  ];
+
+  const [randomDate, setRandomDate] = useState({ day: "", month: "", year: "", weekday: "" });
+
+  useEffect(() => {
+    const selectRandomDate = () => {
+      const randomIndex = Math.floor(Math.random() * dates.length);
+      setRandomDate(dates[randomIndex]);
+    };
+
+    selectRandomDate(); // Select initial random date
+  }, []);
+
   if (!isEnvelopeOpen) {
     return <Envelope onOpen={handleOpenEnvelope} />;
   }
@@ -232,7 +252,7 @@ const App: React.FC = () => {
         <AnimatedSection className="mb-10 p-6 bg-gray-100 rounded-lg shadow-inner">
           <h3 className="font-playfair text-4xl font-bold mb-4" style={{ color: accentGold }}>Retenez la Date</h3>
           <div className="text-3xl font-bold tracking-widest" style={{ color: textDark }}>
-            SAMEDI <span className="text-5xl font-playfair mx-2" style={{ color: accentGold }}>20</span> DÉCEMBRE 2025
+            {randomDate.weekday} <span className="text-5xl font-playfair mx-2" style={{ color: accentGold }}>{randomDate.day}</span> {randomDate.month} {randomDate.year}
           </div>
           {Object.keys(timeLeft).length > 0 && (
             <div className="flex justify-center space-x-4 md:space-x-8 mt-6 text-sm md:text-base">
@@ -352,9 +372,9 @@ const App: React.FC = () => {
           </AnimatedSection>
           
           <AnimatedSection className="p-6 bg-gray-100 rounded-lg shadow-inner">
-            <h4 className="font-playfair text-2xl font-bold mb-4">MARIAGE DÉCONNECTÉ</h4>
+            <h4 className="font-playfair text-2xl font-bold mb-4">HOMMES ET DAMES D'HONNEURS</h4>
             <div className="flex justify-center items-center space-x-4">
-              <img src="/images/icon.png" alt="Social Media Crossed Out" className="w-48 h-auto" />
+              <img src="/images/hommes.avif" alt="Hommes et dames d'honneurs" className="w-full h-auto rounded-lg" />
             </div>
           </AnimatedSection>
 
