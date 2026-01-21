@@ -105,7 +105,6 @@ const App: React.FC = () => {
   }, []);
 
   const paperTextureUrl = "https://img.freepik.com/free-photo/old-paper-texture-background_1182-100.jpg";
-  const coupleImageUrl = "/images/imgmariage.jpg";
 
 
   const mairieMapUrl = "https://www.google.com/maps/search/?api=1&query=Mairie+annexe+de+Djrogobite,Abidjan";
@@ -188,6 +187,7 @@ const App: React.FC = () => {
   };
 
   const [selectedName, setSelectedName] = useState('');
+  const [selectedImage, setSelectedImage] = useState('');
 
   useEffect(() => {
     const coupleNames = [
@@ -199,8 +199,21 @@ const App: React.FC = () => {
       'THOMAS & PRICY',
       'LORIS & LEATICIA',
     ];
-    const randomIndex = Math.floor(Math.random() * coupleNames.length);
-    setSelectedName(coupleNames[randomIndex]);
+    const coupleImages = [
+      '/images/marie5.avif',
+      '/images/mariage3.avif',
+      '/images/marie2.jpeg',
+      '/images/marie3.jpeg',
+      '/images/marie4.avif',
+      '/images/marie6.avif',
+      '/images/marie7.webp',
+      '/images/marie8.jpeg',
+    ];
+    const randomNameIndex = Math.floor(Math.random() * coupleNames.length);
+    const randomImageIndex = Math.floor(Math.random() * coupleImages.length);
+
+    setSelectedName(coupleNames[randomNameIndex]);
+    setSelectedImage(coupleImages[randomImageIndex]);
   }, []);
 
   const names = selectedName.split('');
@@ -241,14 +254,14 @@ const App: React.FC = () => {
         </AnimatedSection>
         
         <AnimatedSection className="mb-6" delay={200}>
-          <h2 className="font-playfair text-4xl font-bold tracking-wider">
+          <h2 className="font-playfair text-3xl md:text-4xl font-bold tracking-wider">
              {names.map((char, index) => (
                 <span
                   key={index}
                   className="cascade-char"
                   style={{ animationDelay: `${50 + index * 50}ms` }}
                 >
-                  {char === ' ' ? '\u00A0' : char}
+                  {char === ' ' ? ' ' : char}
                 </span>
               ))}
           </h2>
@@ -256,7 +269,7 @@ const App: React.FC = () => {
         </AnimatedSection>
 
         <AnimatedSection className="mb-8" delay={400}>
-          <img src={coupleImageUrl} alt="Afefa et Christian" className="rounded-lg shadow-lg w-full h-auto object-cover" />
+          <img src={selectedImage} alt="Les mariés" className="rounded-lg shadow-lg w-full h-auto object-cover" />
         </AnimatedSection>
 
         <AnimatedSection className="mb-8" delay={200}>
