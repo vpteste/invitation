@@ -187,7 +187,7 @@ const App: React.FC = () => {
     }, 500);
   };
 
-  const names = "Afefa & Christian".split('');
+  const names = "TOURE & MOONA".split('');
 
   const dates = [
     { day: "20", month: "DÉCEMBRE", year: "2025", weekday: "SAMEDI" },
