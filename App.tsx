@@ -187,7 +187,23 @@ const App: React.FC = () => {
     }, 500);
   };
 
-  const names = "TOURE & MOONA".split('');
+  const [selectedName, setSelectedName] = useState('');
+
+  useEffect(() => {
+    const coupleNames = [
+      'TOURE & MOONA',
+      'KOUASSI & DAVILLA',
+      'SERY & AICHA',
+      'JULIEN & STEPHANIE',
+      'FRANCK & GRACE',
+      'THOMAS & PRICY',
+      'LORIS & LEATICIA',
+    ];
+    const randomIndex = Math.floor(Math.random() * coupleNames.length);
+    setSelectedName(coupleNames[randomIndex]);
+  }, []);
+
+  const names = selectedName.split('');
 
   const dates = [
     { day: "20", month: "DÉCEMBRE", year: "2025", weekday: "SAMEDI" },
